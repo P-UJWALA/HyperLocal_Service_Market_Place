@@ -1,0 +1,157 @@
+.hero{
+    max-width:1200px;
+    margin:auto;
+    padding:80px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:60px;
+}
+
+.hero-left{
+    flex:1;
+}
+
+.hero-tag{
+    display:inline-block;
+    background:#DBEAFE;
+    color:#2563EB;
+    padding:8px 16px;
+    border-radius:25px;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.hero-left h1{
+    font-size:52px;
+    line-height:1.2;
+    color:#0F172A;
+    margin-bottom:20px;
+}
+
+.hero-left h1 span{
+    color:#2563EB;
+}
+
+.hero-left p{
+    color:#64748B;
+    font-size:18px;
+    line-height:1.8;
+    margin-bottom:35px;
+}
+
+.search-box{
+    display:flex;
+    width:100%;
+    max-width:500px;
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.search-box input{
+    flex:1;
+    border:none;
+    padding:18px;
+    outline:none;
+    font-size:16px;
+}
+
+.search-box button{
+    width:70px;
+    border:none;
+    background:#2563EB;
+    color:white;
+    cursor:pointer;
+    font-size:22px;
+}
+
+.service-tags{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    margin:30px 0;
+}
+
+.service-tags span{
+    background:#F1F5F9;
+    padding:10px 18px;
+    border-radius:25px;
+    color:#334155;
+    font-weight:500;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:20px;
+}
+
+.primary-btn{
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:16px 30px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.primary-btn:hover{
+    background:#1D4ED8;
+}
+
+.secondary-btn{
+    background:white;
+    color:#2563EB;
+    border:2px solid #2563EB;
+    padding:16px 30px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    transition:.3s;
+}
+
+.secondary-btn:hover{
+    background:#2563EB;
+    color:white;
+}
+
+.hero-right{
+    flex:1;
+}
+
+.hero-right img{
+    width:100%;
+    max-width:520px;
+}
+.hero-image{
+    width:100%;
+    max-width:520px;
+}
+
+@media(max-width:900px){
+
+.hero{
+    flex-direction:column-reverse;
+    text-align:center;
+}
+
+.hero-left h1{
+    font-size:38px;
+}
+
+.search-box{
+    margin:auto;
+}
+
+.hero-buttons{
+    justify-content:center;
+}
+
+.service-tags{
+    justify-content:center;
+}
+
+}

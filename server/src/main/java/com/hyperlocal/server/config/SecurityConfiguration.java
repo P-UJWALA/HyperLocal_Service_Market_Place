@@ -2,6 +2,7 @@ package com.hyperlocal.server.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -49,6 +50,13 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
                     session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
               .requestMatchers("/api/auth/**").permitAll()
+               // Public APIs
+              .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+
+                // Admin APIs
+                .requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
               .anyRequest().authenticated())
          .authenticationProvider(authenticationProvider())
          .addFilterBefore(

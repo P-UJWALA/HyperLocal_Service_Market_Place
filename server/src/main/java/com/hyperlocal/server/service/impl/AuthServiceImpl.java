@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.CUSTOMER)
+                .role(Role.ADMIN)
                 .accountStatus(AccountStatus.ACTIVE)
                 .build();
 
@@ -61,8 +61,7 @@ public class AuthServiceImpl implements AuthService {
      @Override
 public ApiResponse<LoginResponse> login(LoginRequest request) {
 
-    User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new RuntimeException("Invalid Id or Password"));
+    
 
     //   if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
     //     throw new RuntimeException("Invalid Password");
@@ -80,9 +79,11 @@ public ApiResponse<LoginResponse> login(LoginRequest request) {
 
     throw new RuntimeException("Invalid email or password");
 }
+User user = userRepository.findByEmail(request.getEmail())
+            .orElseThrow(() -> new RuntimeException("Invalid Id or Password"));
     LoginResponse response = LoginResponse.builder()
             .token(jwtService.generateToken(user))
-            .role("CUSTOMER")
+            .role("ADMIN")
             .fullName(user.getFullName())
             .build();
 

@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,49 +23,68 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CustomUserDetailsService userDetailsService;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
-    public AuthenticationProvider authenticationProvider(){
+    public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
     @Bean
-public AuthenticationManager authenticationManager(
-        AuthenticationConfiguration configuration)
-        throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration configuration)
+            throws Exception {
 
-    return configuration.getAuthenticationManager();
-}
-     @Bean
-public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 
-    http
-        .csrf(csrf -> csrf.disable())
-         .sessionManagement(session ->
-                    session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth
-              .requestMatchers("/api/auth/**").permitAll()
-               // Public APIs
-              .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
+        http
+                .cors(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session
+                        -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                // Public APIs
+                .requestMatchers(HttpMethod.GET, "/api/categories/**").permitAll()
                 // Admin APIs
                 .requestMatchers(HttpMethod.POST, "/api/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/categories/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/categories/**").hasRole("ADMIN")
-              .anyRequest().authenticated())
-         .authenticationProvider(authenticationProvider())
-         .addFilterBefore(
-                jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class
-            ); 
-    return http.build();
-}
+                // Admin
+                .requestMatchers(HttpMethod.POST,
+                        "/api/provider-profile")
+                .hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT,
+                        "/api/provider-profile/*")
+                .hasRole("ADMIN")
+                // Provider
+                .requestMatchers(HttpMethod.GET,
+                        "/api/provider-profile/me")
+                .hasRole("PROVIDER")
+                .requestMatchers(HttpMethod.PUT,
+                        "/api/provider-profile/me")
+                .hasRole("PROVIDER")
+                .anyRequest().authenticated())
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
+        return http.build();
+    }
     // @Bean
     // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     //     http.csrf(csrf -> csrf.disable())
@@ -74,7 +94,6 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
     //                 .anyRequest().authenticated()
     //             )
     //            .httpBasic(Customizer.withDefaults());
-
     //     return http.build();
     // }
 }

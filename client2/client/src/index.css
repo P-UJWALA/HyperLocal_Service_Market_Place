@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* ---- Design tokens ----------------------------------------------------
+   Clean, conventional consumer-app palette: white surfaces, one confident
+   trust-blue, one warm action color, and a standard verified-green — the
+   colors people already associate with "trustworthy local service app."
+------------------------------------------------------------------------ */
+@theme {
+  --color-ink: #111827;      /* headline / primary text */
+  --color-muted: #6b7280;    /* secondary text */
+  --color-primary: #2f6fed;  /* trust blue — links, secondary actions, icons */
+  --color-cta: #ff7a30;      /* warm orange — primary buttons */
+  --color-success: #16a34a;  /* verified / trust green */
+  --color-surface: #ffffff;  /* cards */
+  --color-bg-soft: #f5f7fb;  /* alternating section background */
+  --color-border: #e5e7eb;   /* hairline borders */
+
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---- Base --------------------------------------------------------------*/
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  background-color: var(--color-cta);
+  color: #ffffff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(request.getEmail())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ADMIN)
+                .role(Role.CUSTOMER)
                 .accountStatus(AccountStatus.ACTIVE)
                 .build();
 
@@ -83,7 +83,7 @@ User user = userRepository.findByEmail(request.getEmail())
             .orElseThrow(() -> new RuntimeException("Invalid Id or Password"));
     LoginResponse response = LoginResponse.builder()
             .token(jwtService.generateToken(user))
-            .role("ADMIN")
+            .role(user.getRole().name())
             .fullName(user.getFullName())
             .build();
 
